@@ -23,10 +23,10 @@ export default class SearchController {
     @Res() res: Response,
     @Body() searchDto: SearchDTO,
   ) {
-    searchDto.context.domain = 'dsep:courses';
+    searchDto.context.domain = 'onest:learning-experiences';
     searchDto.context.action = 'search';
-    searchDto.context.bpp_id = 'bpp.dsep.samagra.io';
-    searchDto.context.bpp_uri = 'https://bpp.dsep.samagra.io';
+    searchDto.context.bpp_id = process.env.BPP_ID;
+    searchDto.context.bpp_uri = `${process.env.BPP_URI}/`;
     sendAcknowledgement(res, 'ACK');
     return this.searchService.handleSearch(searchDto);
   }

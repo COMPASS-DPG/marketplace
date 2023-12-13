@@ -1,22 +1,23 @@
-# SkillEd: Trainings and Courses
+# Marketplace BAP
+This service acts as a Seeker platform which fetches the course catalogs from the different provider platforms (BPPs) for the marketplace application. 
 
-This doc underlines the architectural implementational details of reference **Beckn Provider Platform (BPP)** implementation for the **Courses and Training** track complaint to **DSEP spec v1.0.0.**
+This doc underlines the architectural implementational details of reference **Beckn Application Platform (BAP)** implementation for the **Learning Experiences** track complaint to **DSEP spec v1.1.0.**
+
 
 ### Deployment and Network Registration Details
 
-The reference BPP implemented in this repository is onboarded on the `Beckn Gateway` and `Beckn Gateway Registry` under the `Courses and Trainings` category.
+The reference BAP implemented in this repository is onboarded on the `Onest Gateway` and `Onest Registry` under the `Learning Experiences` category.
 
-- [**BPP Deployed URL**](https://bpp.dsep.samagra.io)
-- [**BAP Deployed URL**](https://bap.dsep.samagra.io)
-- **BPP Network Participant Id**: bpp.dsep.samagra.io
-- [Network Participant Information on Beckn Registry](https://registry.becknprotocol.io/network_participants/index/network_participants/show/430)
+<!-- - [**BPP Deployed URL**](https://bpp.dsep.samagra.io) -->
+- [**BAP Deployed URL**](https://test1-bap-compass-samagra.loca.lt)
+<!-- - **BPP Network Participant Id**: bpp.dsep.samagra.io -->
+<!-- - [Network Participant Information on Onest Registry](https://registry.becknprotocol.io/network_participants/index/network_participants/show/430) -->
 
 ## Tech Stack
 
 **Programming Language**: TypeScript
 **Framework**: NestJS
-**Database**: Postgres exposed via Hasura
-**Runtime**: Node v16.19.0
+**Runtime**: Node18
 
 ## Project Organisation
 
@@ -49,32 +50,30 @@ This reference implementation contains all three network participants, i.e. **Be
 The `apps` directory contains the actual apps for each network participant
 `apps/bap` and `apps/bg` contains the code for a sample `Beckn Application Platform` and `Beckn Gateway` respectively for testing the `Beckn Provider Platform`.
 
-More details about each network participant and their implementation can be found their following directories here as:
+<!-- More details about each network participant and their implementation can be found their following directories here as:
 
 - [Beckn Application Platform (BAP)](https://github.com/Samagra-Development/dsep/blob/master/apps/bap/README.md)
 - [Beckn Gateway(BG)](https://github.com/Samagra-Development/dsep/blob/master/apps/bg/README.md)
-- [Beckn Provider Platform (BPP)](https://github.com/Samagra-Development/dsep/blob/master/apps/bpp/README.md)
+- [Beckn Provider Platform (BPP)](https://github.com/Samagra-Development/dsep/blob/master/apps/bpp/README.md) -->
 
-## Architecture
+<!-- ## Architecture
 
-![Block Diagram](./docs/Arch.png)
+![Block Diagram](./docs/Arch.png) -->
 
 ## Features & User workflow
 
-The reference app is a **Course Discovery Platform** that talks in **Decentralised Skilling and Education Protocol** and curates courses from various providers like, **Swayam Portal**, **MIT OCW**, **Udemy**, etc., right now only swayam is onboarded as a provider, other platforms can be easily onboarded onto the BPP.
+The reference app is a **Course Seeker Platform** that talks in **Decentralised Skilling and Education Protocol** and curates courses from various providers. Right now only a mock BPP is onboarded as a provider, which sends mock responses for every request.
 
-The `/search` request is forwarded to the `Beckn Gateway` with the domain of `dsep:courses` so that reaches our reference `BPP`. The `BPP` then forwards the `search` request to the `Swayam Provider Wrapper` which translates the `Beckn` compliant search request into a search query compatible to be forwarded to the `Swayam Portal` and fetches the result from there. The fetched results are then again converted in `Beckn /on_search` compliant response and forwarded to the `BPP`, which then calls the `/on_back` endpoint on the `bap_uri` present in the search requests's `context`. The sample `BAP` implementation for the demonstration of end to end flow right now, forwards the request to the `client proxy` which determines which client the request belongs to based on the `message_id` and `transaction_id` in the context of the `on_search` request and forwards the response to the concerned client.
-The `client` and `client proxy` are connected together via a websocket connection using `redis` and `socket.io` to create a `publish-subscribe` model to support the **asynchronous nature** of `Beckn APIs`. (To learn more about the Beckn APIs and their structure refer the [official Beckn Protocol Website](https://https://becknprotocol.io/))
+The `/search` request is forwarded to the `Onest Gateway` with the domain of `onest:learning-experiences` so that reaches our reference `BPP`. The `BPP` then responds with a mock search response containing course catalog as search responses in beckn `/on_search` compliant form.  The `BPP` then sends the search responses to the `/on_search` endpoint of our service. Then the search responses are aggregated in the redis store as value for every search request with key as `messageId`. This enables the marketplace-portal service to poll for search responses until a maximum threshold time as the responses from different `BPPs` come async.
+
 
 ### Supported Methods
 
-**/search:** This method/endpoint allows for searching of courses and training via a direct DSEP complaint request to the BPP using the context.domain as `dsep:courses`
+**/search:** This method/endpoint allows for searching of courses and training via a direct DSEP complaint request to the BPP using the context.domain as `onest:learning-experiences`
 
-**/select**: This method/endpoint is allows for selecting some courses or trainings to be enrolled in/purchased by the user. The context domain for this method should be `dsep:courses`.  In the reference course discovery platform implementation this endpoint is called when expanding a particular course to view its details.
+**/confirm**: This method/endpoint indicated the confirmation of a course purchase order after successful payment/enrollment. In the reference course discovery platform implementation this endpoint is called when visiting the course on the external website.
 
-**/init**: This method/endpoint is allows for initiating purchasing a course or training by getting a quote from the provider and entering personal details required for enrollment. The context domain for this method should be `dsep:courses`.
-
-**/confirm**: This method/endpoint indicated the confirmation of an order after successful payment/enrollment. In the reference course discovery platform implementation this endpoint is called when visiting the course on the external website.
+**/rating**: This method/endpoint allows for providing ratings for different courses that were completed by users.
 
 ## Local installation
 
@@ -145,13 +144,11 @@ Or start all of them together using
 
 Follow [this guide](https://github.com/sanjay95/BECKN-Integration-to-Gateway/blob/main/README.md) to onboard yourself on the Beckn Registry.
 
-## Resources to know more about DSEP and Beckn
+## Resources to know more about DSEP, ONEST and Beckn
 
 - [Beckn Official Website](https://becknprotocol.io)
 - [Core DSEP Specification](https://github.com/beckn/protocol-server/blob/v2/schemas/core.yaml)
 - [DSEP use case tracks discussion](https://github.com/beckn/DSEP-Specification/discussions)
+- [ONEST Starter Pack](https://starterpack.onest.network/learn/introduction)
+- [ONEST Sandbox network](https://sandbox.onest.network/)
 
-## Stay in touch
-
-- Author: [Yash Mittal](https://github.com/techsavvyash)
-- Mentor on the project: [Chakshu Gautam](https://github.com/ChakshuGautam)

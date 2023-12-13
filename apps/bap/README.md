@@ -30,6 +30,8 @@ This is a NestJS based server for the [BAP side](https://developers.becknprotoco
 
 Where `on_cancel`, `on_confirm`, `on_init`, `on_rating`, `on_search`, `on_select`, `on_status`, `on_support`, `on_track`, `on_update` are beckn keywords getting tracked in separate folders.
 
+This service also has a redis store which stores the search responses sent from multiple BPPs and will eventually be polled by the marketplace frontend.
+
 ## TODO
 - [ ] Fix Swagger Doc for NestJS
 - [ ] Validation for requests using OpenAPI Spec - similar to protocol server. 

@@ -85,12 +85,27 @@ export class OnSearchService {
     return courses.filter(Boolean);
   }
 
+  private validOnSearchDTO(onSearchDTO: OnSearchDTO) {
+    if(onSearchDTO.message.catalog === undefined) {
+      return false;
+    }
+    if(onSearchDTO.message.catalog.providers == undefined) {
+      return false;
+    }
+    // additional validation
+    return true;
+  }
+
   async handleOnSearch(onSearchDto: OnSearchDTO) {
     // TODO: validate the request from BPP to check if all the required information is available or not
     console.log(
       'onsearchdto in on search: ',
       JSON.stringify(onSearchDto, null, 2),
     );
+
+    if(!this.validOnSearchDTO(onSearchDto)) {
+      return;
+    }
 
     // extract course information from the search response sent by BPP
     const courses = this.extractCoursesInfo(onSearchDto);
