@@ -40,8 +40,8 @@ export class OnSearchService {
                     .split(',')
                     .map((lang: string) => lang.trim());
                   break;
-                case 'Course Instructor':
-                  author = data?.value;
+                case 'instructors':
+                  author = data?.value.split(',')[0];
                   break;
               }
             });
@@ -110,10 +110,13 @@ export class OnSearchService {
     // extract course information from the search response sent by BPP
     const courses = this.extractCoursesInfo(onSearchDto);
 
-    // filter to get only those courses added on marketplace and verified by admin
+    console.log("Course info: ", courses);
+
     const filteredCourses = await this.filterNullishValues(courses);
 
     // any further filtering
+
+    console.log("Filtered courses: ", filteredCourses);
 
     // messageId to store the responses
     const messageId: string = onSearchDto.context.message_id;
@@ -121,6 +124,8 @@ export class OnSearchService {
 
     await this.redisService.appendResults(messageId, filteredCourses);
 
-    return;
+    console.log(`Value associated with the key ${messageId} is ${JSON.stringify(this.redisService.get(messageId))}`);
+    
+    return;  
   }
 }

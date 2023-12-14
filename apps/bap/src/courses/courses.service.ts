@@ -35,6 +35,8 @@ export class CoursesService {
 
     const payload: SearchDTO = searchRequestSchema.payload;
 
+    console.log(JSON.stringify(payload));
+    console.log("BG URL, req body: ", url, payload);
     const { data } = await axios.post(url, payload);
 
     return this.generateDefaultResponse(data, searchRequestSchema);

@@ -220,6 +220,95 @@ export class SearchService {
                     }
                   ],
                   "rateable": false
+                },
+                {
+                  "id": "QW311cnNlTGlzdDovbmQyX2NlYzIzX2NzMDI=",
+                  "parent_item_id": "Q291cnNlTGlzdDovbmQyX2NlYzIzX2NzMDI=",
+                  "descriptor": {
+                    "name": "NestJS: Zero to Hero",
+                    "long_desc": "This course teaches you how to build simple to advanced backend systems using nestjs",
+                    "images": [
+                      {
+                        "url": "https://storage.googleapis.com/swayam-node2-production.appspot.com/assets/img/cec20_cs04/Course%20Image.png"
+                      }
+                    ]
+                  },
+                  "price": {
+                    "currency": "INR",
+                    "value": "0"
+                  },
+                  "category_id": "COMP_SCI_ENGG",
+                  "recommended": false,
+                  "time": {
+                    "label": "Course Schedule",
+                    "duration": "P12W",
+                    "range": {
+                      "start": "2023-01-17T18:30:00.000000Z",
+                      "end": "2023-04-09T18:29:00.000000Z"
+                    }
+                  },
+                  "rating": "4.2",
+                  "tags": [
+                    {
+                      "descriptor": {
+                        "name": "courseInfo"
+                      },
+                      "list": [
+                        {
+                          "descriptor": {
+                            "name": "numberOfPurchases"
+                          },
+                          "value": "180"
+                        },
+                        {
+                          "descriptor": {
+                            "name": "instructors"
+                          },
+                          "value": "Ariel Weinberger"
+                        },
+                        {
+                          "descriptor": {
+                            "name": "languages"
+                          },
+                          "value": "English"
+                        },
+                        {
+                          "descriptor": {
+                            "name": "url"
+                          },
+                          "value": "https://www.udemy.com/course/nestjs-zero-to-hero/"
+                        },
+                        {
+                          "decsriptor": {
+                            "name": "enrollmentEndDate"
+                          },
+                          "value": "2023-02-28T18:29:00.000000Z"
+                        }
+                      ],
+                      "display": true
+                    },
+                    {
+                      "descriptor": {
+                        "name": "competencyInfo"
+                      },
+                      "list": [
+                        {
+                          "descriptor": {
+                            "name": "TypeScript"
+                          },
+                          "value": "Level1, Level2"
+                        },
+                        {
+                          "descriptor": {
+                            "name": "Backend engineering"
+                          },
+                          "value": "Level3"
+                        }
+                      ],
+                      "display": true
+                    }
+                  ],
+                  "rateable": false
                 }
               ]
             }
@@ -251,7 +340,7 @@ export class SearchService {
       console.log('calling request forwarder');
       await lastValueFrom(
         this.httpService.post(
-          searchDto.context.bap_uri + 'on_search',
+          searchDto.context.bap_uri + '/on_search',
           searchResponse,
           requestOptions,
         ),

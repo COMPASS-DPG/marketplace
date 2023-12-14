@@ -66,7 +66,7 @@ export class RatingService {
     }
     // forwarding the response back to BAP /on-rating
     return await requestForwarder(
-      ratingDto.context.bap_uri + 'on_rating',
+      ratingDto.context.bap_uri + '/on_rating',
       ratingResponse,
       this.httpService,
     );

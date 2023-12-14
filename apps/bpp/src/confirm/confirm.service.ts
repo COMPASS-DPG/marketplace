@@ -309,7 +309,7 @@ export class ConfirmService {
 
       return await lastValueFrom(
         this.httpService.post(
-          confirmResponse.context.bap_uri + 'on_confirm',
+          confirmResponse.context.bap_uri + '/on_confirm',
           confirmResponse,
           requestOptions,
         ),

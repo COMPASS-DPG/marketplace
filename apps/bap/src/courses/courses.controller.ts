@@ -53,7 +53,7 @@ export class CoursesController {
       this.logger.log(
         `Successfully triggered backen gateway to search courses on onest network for:- ${searchText}`,
       );
-
+      console.log(response);
       return res.status(HttpStatus.OK).json(response);
     } catch (error) {
       this.logger.error(
@@ -86,6 +86,13 @@ export class CoursesController {
         `Initiated polling search result for message id #${messageId} on redis`,
       );
       const results = await this.redisStoreService.pollValue(messageId);
+      
+      if(results == null) {
+        return res.status(HttpStatus.OK).json({
+          message: 'No new responses available',
+          data: {}
+        });
+      }
 
       this.logger.log(
         `Successfully polled search result for message id #${messageId} on redis`,
